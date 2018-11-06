@@ -1,0 +1,280 @@
+// Laptopprogram.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
+
+#include "pch.h"
+#include <iostream>
+#include "string"
+#include <stdlib.h>
+#include <time.h>
+using namespace std;
+
+int posx = 1;
+int posy = 1;
+int diffchose;
+
+class level
+{
+public:
+	int entranceposx;
+	int	 entranceposy;
+	level()
+	{
+		entranceposx = 0;
+		entranceposy = 0;
+	}
+};
+
+class player
+{
+public:
+	//These are individual Player variables
+	string playername;
+	int goldcount;
+	player()
+	{
+		playername = "Default Character name";
+		goldcount = 10; //goldcount will start at 10 so the player has a chance should he run into an enemy before finding a chest
+	}
+
+};
+
+class difficultylvl
+{
+public:
+	int goldlost;
+	int goldgain;
+	difficultylvl()
+	{
+		goldlost = 0;
+		goldgain = 0;
+		cout << "Please select a difficulty: " << endl;
+		cout << "1. Easy" << endl;
+		cout << "2. Hard" << endl;
+		int diffchose;
+		cin >> diffchose;
+
+		switch (diffchose)
+		{
+		case (1):
+		{
+			cout << "You chose Easy, this should be a breeze! " << endl;
+			goldlost = (goldlost + 4);
+			goldgain = (goldgain + 4);
+		}
+		break;
+
+		case(2):
+		{
+			cout << "You chose Hard, I wish you luck! " << endl;
+			goldlost = (goldlost + 8);
+			goldgain = (goldgain + 2);
+		}
+		break;
+		}
+	}
+
+};
+
+class attack_enemy : public player {
+public:
+	//This class will determine if the player wins a fight against the monster, if the player loses they will lose a lot of gold
+	bool didcharwin;
+	int randomnumber;
+	//int goldlost;
+	attack_enemy()
+	{
+		randomnumber = (rand() % 2); //this should produce a random number each time the command is pressed, I use a different function later on because this is a predetermined value in windows
+		if (randomnumber = 1)
+		{
+			didcharwin == true;
+			cout << "You have slain the monster, you receive 4 gold" << endl;
+		}
+		else
+		{
+			didcharwin == false;
+			cout << "The monster has hurt you, you lose 8 gold" << endl;
+		}
+	}
+};
+
+class direction : public player
+{
+public:
+	int direction_chosen;
+	direction()
+	{
+		cout << "Which direction do you wish to head?" << endl;
+		cout << "1. North" << endl;
+		cout << "2. East" << endl;
+		cout << "3. South" << endl;
+		cout << "4. West" << endl;
+		cin >> direction_chosen;
+
+		switch (direction_chosen)
+		{
+		case 1: //North
+		{
+			posy = (posy + 1);
+			cout << "You moved north" << endl;
+
+		}
+		break;
+
+		case 2: //East
+		{
+			posx = (posx + 1);
+			cout << "You moved East" << endl;
+		}
+		break;
+
+		case 3: //South
+		{
+			posy = (posy - 1);
+			cout << "You moved South" << endl;
+		}
+		break;
+
+		case 4: //west
+		{
+			posx = (posx - 1);
+			cout << "You moved West" << endl;
+		}
+		break;
+		}
+
+
+	}
+};
+int main()
+{
+	player player1; //This creates a character
+	cout << "Welcome to my artefact game, Please enter your name: " << endl; //Basic lines of text to introduce the character
+	cin >> player1.playername;
+	cout << "Hello " << player1.playername << " Please enjoy" << endl;
+	difficultylvl difficultylvl1;
+
+	while (player1.goldcount > 0)
+	{
+		//This loop shows the player all of the options available to them whilst they still have gold
+		//This loop will run for the duration that they have more than 0 gold
+		cout << "" << endl;
+		cout << "You enter the room, your three options are: " << endl;
+		cout << "1. Travel " << endl;
+		cout << "2. Gold Check " << endl;
+		cout << "3. Rules" << endl;
+		int answer;
+		cin >> answer;
+
+		switch (answer)
+		{
+		case 1:
+		{
+			srand(time(NULL)); //These 4 lines will allow us to generate a random "Room" 
+			const char determine_room[5] = { '1', '2', '3', '4', '5' };
+
+			int Randomnumber = rand() % 5; //picks a random number between 0 and 4
+			//cout << determine_room[Randomnumber];       Used this to test that random number was working
+			cout << "Select Your direction" << endl;
+			direction direction1;
+
+			if (Randomnumber == 1)
+			{
+				cout << "This room is empty" << endl;
+			}
+
+			else if (Randomnumber == 5)
+			{
+				cout << "This room is empty" << endl;
+			}
+
+			else if (Randomnumber == 2)
+			{
+				cout << "TREASURE" << endl;
+				player1.goldcount = (player1.goldcount + difficultylvl1.goldgain);
+				cout << "You recieve: " << difficultylvl1.goldgain << " Good work!" << endl;
+
+			}
+
+			else if (Randomnumber == 4)
+			{
+				cout << "TREASURE" << endl;
+				player1.goldcount = (player1.goldcount + difficultylvl1.goldgain);
+				cout << "You recieve: " << difficultylvl1.goldgain << " Great Find!" << endl;
+			}
+
+			else
+			{
+				cout << "" << endl;
+				cout << "You've encountered an enemy!" << endl << "Quickly Decide what to do: " << endl;
+				cout << "1. Attack" << endl;
+				cout << "2. Give it gold to leave you alone" << endl;
+				cout << "3. Try and run (Bad Idea)" << endl;
+				cout << "" << endl;
+				int response;
+				cin >> response;
+
+				switch (response)
+				{
+				case 1:
+				{
+					attack_enemy attackenemy1;
+					attackenemy1.didcharwin;
+					if (attackenemy1.didcharwin = true)
+					{
+						player1.goldcount = (player1.goldcount + difficultylvl1.goldgain);
+					}
+					else if (attackenemy1.didcharwin = false)
+					{
+						player1.goldcount = (player1.goldcount + difficultylvl1.goldlost);
+					}
+				}
+				break;
+				case 2:
+				{
+					cout << "you lose 1 gold" << endl;
+					player1.goldcount = (player1.goldcount - difficultylvl1.goldlost);
+				}
+				break;
+
+				case 3:
+				{
+					cout << "I warned you..." << endl << "YOU SHALL BE PUNISHED!" << endl;
+					player1.goldcount = 0;
+				}
+				break;
+				default:
+				{
+					cout << "Please enter a valid Character!" << endl;
+				}
+				break;
+				}
+			}
+
+		}
+		break;
+		case 2:
+		{
+			cout << "" << endl;
+			cout << "You are currently carrying: " << player1.goldcount << " Gold" << endl;
+		}
+		break;
+
+		case 3:
+		{
+			cout << "Explore the abandoned mine to discover treasure and earn gold" << endl;
+			cout << "Be warned though, for you will uncover greedy monsters that will try to steal your gold" << endl;
+			cout << "You're gold is your lifeline, should you lose all of your gold the game will be over" << endl;
+			cout << "To win simply reach your contracted amount of gold and escape the mine" << endl;
+			cout << "It is recommended to keep track of the path you choose as that is the only way you can escape!" << endl;
+			cout << "your current co-ordinates are: " << posx << " , " << posy << endl;
+
+		}
+		break;
+		}
+	}
+
+
+}
+
+// ConsoleApplication1.cpp : Defines the entry point for the console application.
+//
